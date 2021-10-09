@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CalidadT2.Constantes
+﻿namespace CalidadT2.Constantes
 {
     public class ESTADO
     {

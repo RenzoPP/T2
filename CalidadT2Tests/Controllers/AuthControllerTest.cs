@@ -11,12 +11,20 @@ namespace CalidadT2Tests
     [TestFixture]
     public class AuthControllerTest
     {
+        private Mock<IUsuarioRepository> mock;
+        private AuthController controller;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mock = new Mock<IUsuarioRepository>();
+        }
+
         [Test]
         public void TestLoginPostFail()
         {
-            var mock = new Mock<IUsuarioRepository>();
             mock.Setup(o => o.FindUserByCredentials("admin", "1234")).Returns((Usuario)null);
-            var controller = new AuthController(mock.Object, null);
+            controller = new AuthController(mock.Object, null);
 
             var result = controller.Login("admin", "adminfake") as ViewResult;
 
@@ -27,14 +35,25 @@ namespace CalidadT2Tests
         [Test]
         public void TestLoginPostSuccess()
         {
-            var mock = new Mock<IUsuarioRepository>();
             mock.Setup(o => o.FindUserByCredentials("user1", "user1")).Returns(new Usuario());
 
             var authMock = new Mock<IAuthService>();
-
-            var controller = new AuthController(mock.Object, authMock.Object);
+            controller = new AuthController(mock.Object, authMock.Object);
 
             var result = controller.Login("user1", "user1");
+
+            Assert.IsInstanceOf<RedirectToActionResult>(result);
+        }
+
+        [Test]
+        public void TestLogout()
+        {
+            mock.Setup(o => o.FindUserByCredentials("user1", "user1")).Returns(new Usuario());
+
+            var authMock = new Mock<IAuthService>();
+            var controller = new AuthController(mock.Object, authMock.Object);
+
+            var result = controller.Logout();
 
             Assert.IsInstanceOf<RedirectToActionResult>(result);
         }

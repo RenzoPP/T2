@@ -1,5 +1,3 @@
-using System;
-
 namespace CalidadT2.Models
 {
     public class ErrorViewModel

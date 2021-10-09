@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using CalidadT2.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using CalidadT2.Repositories;
 
 namespace CalidadT2.Controllers
 {
     public class HomeController : Controller
     {
-        private AppBibliotecaContext app;
-        public HomeController(AppBibliotecaContext app)
+        private readonly ILibroRepository repository;
+        public HomeController(ILibroRepository repository)
         {
-            this.app = app;
+            this.repository = repository;
         }
 
         [HttpGet]
         public IActionResult Index()
-        {            
-            var model = app.Libros.Include(o => o.Autor).ToList();
-            return View(model);
+        {
+            var libros = repository.GetLibros();
+            return View(libros);
         }
     }
 }
